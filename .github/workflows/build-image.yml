@@ -13,7 +13,7 @@ jobs:
         name: Build Container Image
         uses: docker/build-push-action@v4
         with:
-          context: "{{defaultContext}}:${{ github.actor }}"
+          context: "./" # 현재 디렉터리를 컨텍스트로 설정
           file: ./Dockerfile
           platforms: linux/amd64
           push: false
