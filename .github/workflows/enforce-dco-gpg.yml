@@ -12,18 +12,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-            fetch-depth: 0  # 전체 git 히스토리를 체크아웃
 
       - name: DCO Check
-        uses: scottrigby/dco-gha-action@v1
-        with:
-            pr_comment: true
-          
+        uses: cla-assistant/github-action@v2.1.3-beta
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check GPG
         run: |
-            git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
-            if [ $? -eq 0 ]; then
-                echo "One or more commits are missing GPG signatures. Failing build."
-                exit 1
-            fi
+          git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
+          if [ $? -eq 0 ]; then
+            echo "One or more commits are missing GPG signatures. Failing build."
+            exit 1
+          fi
