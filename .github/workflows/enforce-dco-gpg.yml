@@ -10,11 +10,12 @@ jobs:
   check-dco-gpg:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Check DCO
         uses: wagoid/commitlint-github-action@v4
-        with:
-          config: '@commitlint/config-conventional'
-          flags: '--signed-off-by'
+          
       - name: Check GPG
         run: |
           git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'

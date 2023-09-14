@@ -1,0 +1,25 @@
+name: Auto-link PR to Issue
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  link-pr-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Link PR to Issue
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const issue_number = context.payload.pull_request.number;
+            const body = context.payload.pull_request.body + "\n\nCloses #" + issue_number;
+            github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: issue_number,
+              body: body
+            });
