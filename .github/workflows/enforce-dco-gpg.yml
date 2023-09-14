@@ -14,12 +14,12 @@ jobs:
         uses: actions/checkout@v2
         with:
             fetch-depth: 0  # 전체 커밋 히스토리를 가져옵니다.
-    
-      # DCO 체크를 다른 액션으로 교체 (예: moby/buildkit)
+
       - name: Check DCO
-        uses: moby/buildkit/actions/dco@master
-          
-      # GPG 체크
+        uses: wagoid/commitlint-github-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check GPG
         run: |
           git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
