@@ -12,14 +12,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      # DCO 체크
-      - name: DCO Check
-        uses: scottrigby/dco-gha-action@v1
-        with:
-          error_message: 'Commit(s) are missing Developer Certificate of Origin (DCO).'
-      
-      # GPG 체크
+        
+      - name: Check DCO
+        uses: wagoid/commitlint-github-action@v4
+          
       - name: Check GPG
         run: |
           git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
