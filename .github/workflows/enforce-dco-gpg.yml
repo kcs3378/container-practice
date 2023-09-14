@@ -12,7 +12,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+        with:
+            fetch-depth: 0  # 전체 커밋 히스토리를 가져옵니다.
+    
+
       - name: Check DCO
         uses: wagoid/commitlint-github-action@v4
           
