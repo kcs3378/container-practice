@@ -12,17 +12,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+            fetch-depth: 0  # 전체 git 히스토리를 체크아웃
 
-      - name: Display github.event.before
-        run: echo "github.event.before value is ${{ github.event.before }}"
-
-      - name: Check DCO
-        uses: wagoid/commitlint-github-action@v4
+      - name: DCO Check
+        uses: scottrigby/dco-gha-action@v1
+        with:
+            pr_comment: true
           
       - name: Check GPG
         run: |
-          git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
-          if [ $? -eq 0 ]; then
-            echo "One or more commits are missing GPG signatures. Failing build."
-            exit 1
-          fi
+            git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
+            if [ $? -eq 0 ]; then
+                echo "One or more commits are missing GPG signatures. Failing build."
+                exit 1
+            fi
