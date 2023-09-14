@@ -3,18 +3,34 @@ name: Build Image
 on: [pull_request]
 
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
     steps:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
-        name: Build Container Image
+        name: Build Backend Container Image
         uses: docker/build-push-action@v4
         with:
-          context: "./" # 현재 디렉터리를 컨텍스트로 설정
-          file: ./Dockerfile
+          context: ./KangChangsoo/backend/
+          file: ./KangChangsoo/backend/Dockerfile
           platforms: linux/amd64
           push: false
-          tags: test:latest
+          tags: test-backend:latest
+  
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Build Frontend Container Image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./KangChangsoo/frontend/
+          file: ./KangChangsoo/frontend/Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: test-frontend:latest
