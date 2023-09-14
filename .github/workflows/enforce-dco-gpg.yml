@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Display github.event.before
+        run: echo "github.event.before value is ${{ github.event.before }}"
+
       - name: Check DCO
         uses: wagoid/commitlint-github-action@v4
           
