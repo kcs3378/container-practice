@@ -13,11 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # DCO 체크
       - name: DCO Check
-        uses: cla-assistant/github-action@v2.1.3-beta
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        uses: scottrigby/dco-gha-action@v1
+        with:
+          error_message: 'Commit(s) are missing Developer Certificate of Origin (DCO).'
+      
+      # GPG 체크
       - name: Check GPG
         run: |
           git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
