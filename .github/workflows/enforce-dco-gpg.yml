@@ -1,0 +1,29 @@
+name: Enforce DCO and GPG
+# 테스트
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  check-dco-gpg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+            fetch-depth: 0 
+
+      - name: Check DCO
+        uses: wagoid/commitlint-github-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check GPG
+        run: |
+          git rev-list --pretty="format:%G?" "${{ github.event.before }}".. | grep -qv 'G'
+          if [ $? -eq 0 ]; then
+            echo "One or more commits are missing GPG signatures. Failing build."
+            exit 1
+          fi
